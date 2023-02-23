@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt
 
 # Exercise C2-4-6 : Plotting the precision-recall curve
 def plot_precision_recall(): 
+    pass
 
     # Please note: this function assumes that you have pre-computed the precions/recall value pairs from the test sequence
     #              by subsequently setting the variable configs.conf_thresh to the values 0.1 ... 0.9 and noted down the results.
@@ -57,6 +58,7 @@ def compute_precision_recall(det_performance_all, conf_thresh=0.5):
 
 # Exercise C2-3-2 : Transform metric point coordinates to BEV space
 def pcl_to_bev(lidar_pcl, configs, vis=True):
+    pass
 
     # compute bev-map discretization by dividing x-range by the bev-image height
 
@@ -88,4 +90,3 @@ def pcl_to_bev(lidar_pcl, configs, vis=True):
     #        if cv2.waitKey(10) & 0xFF == 27:
     #            break
     #    cv2.destroyAllWindows()
-

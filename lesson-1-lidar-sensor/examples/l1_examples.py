@@ -62,6 +62,9 @@ def range_image_to_point_cloud(frame, lidar_name, vis=True):
     extrinsic = np.array(calibration.extrinsic.transform).reshape(4,4)
     az_correction = math.atan2(extrinsic[1,0], extrinsic[0,0])
     azimuth = np.linspace(np.pi,-np.pi,width) - az_correction
+    
+    # get direction front facing x-axis in degree
+    # print(azimuth[round(ri_range.shape[1]/2)])
 
     # expand inclination and azimuth such that every range image cell has its own appropriate value pair
     azimuth_tiled = np.broadcast_to(azimuth[np.newaxis,:], (height,width))
@@ -134,13 +137,13 @@ def print_range_image_shape(frame, lidar_name):
     print(ri.shape)
 
     # extract range data and convert to 8 bit
-    #ri_range = ri[:,:,0]
-    #ri_range = ri_range * 256 / (np.amax(ri_range) - np.amin(ri_range))
-    #img_range = ri_range.astype(np.uint8)
+    ri_range = ri[:,:,0]
+    ri_range = ri_range * 256 / (np.amax(ri_range) - np.amin(ri_range))
+    img_range = ri_range.astype(np.uint8)
     
     # visualize range image
-    #cv2.imshow('range_image', img_range)
-    #cv2.waitKey(0)
+    cv2.imshow('range_image', img_range)
+    cv2.waitKey(0)
 
 
 # Example C1-3-3 : print angle of vertical field of view

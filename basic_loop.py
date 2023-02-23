@@ -61,7 +61,7 @@ import l1_exercises
 data_filename = 'training_segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord' # Sequence 1
 #data_filename = 'training_segment-10072231702153043603_5725_000_5745_000_with_camera_labels.tfrecord' # Sequence 2
 # data_filename = 'training_segment-10963653239323173269_1924_000_1944_000_with_camera_labels.tfrecord'  # Sequence 3
-show_only_frames = [0, 10]  # show only frames in interval for debugging
+show_only_frames = [0, 0]  # show only frames in interval for debugging
 
 # set pause time between frames in ms (0 = stop between frames until key is pressed)
 vis_pause_time = 0  
@@ -71,6 +71,7 @@ data_fullpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'datas
 results_fullpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'results')
 datafile = WaymoDataFileReader(data_fullpath)
 datafile_iter = iter(datafile)  # initialize dataset iterator
+
 
 ##################
 # Perform detection & tracking over all selected frames
