@@ -61,7 +61,7 @@ import l1_exercises
 data_filename = 'training_segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord' # Sequence 1
 # data_filename = 'training_segment-10072231702153043603_5725_000_5745_000_with_camera_labels.tfrecord' # Sequence 2
 # data_filename = 'training_segment-10963653239323173269_1924_000_1944_000_with_camera_labels.tfrecord'  # Sequence 3
-show_only_frames = [0, 10]  # show only frames in interval for debugging
+show_only_frames = [0, 200]  # show only frames in interval for debugging
 
 # set pause time between frames in ms (0 = stop between frames until key is pressed)
 vis_pause_time = 0  
@@ -76,8 +76,19 @@ datafile_iter = iter(datafile)  # initialize dataset iterator
 ##################
 # Perform detection & tracking over all selected frames
 
+precisions = []
+recalls = []
+threshs = 0.1 * np.linspace(1,9,9)
+det_performance_all2 = []
+for i in range(len(threshs)):
+    det_performance_all2.append([])
+    
+calc_Precision_recall = False
+# print(threshs)
+
 cnt_frame = 0
 det_performance_all = []  # used for exercises in C2-4
+
 while True:
     try:
         #################################
@@ -166,12 +177,21 @@ while True:
 
         # Example C2-4-4 : Display detected objects on top of BEV map
         # detections = load_object_from_file(results_fullpath, data_filename, 'detections_' + configs.model + '_' + str(configs.conf_thresh), cnt_frame)
-        # l2_examples.render_obj_over_bev(detections, lidar_bev_labels, configs, True)
+        # l2_examples.render_obj_over_bev(detections, lidar_bev_labels, configs, False)
 
         # Exercise C2-4-5 : Compute precision and recall (part 1/2 - remove comments only, no action inside functions required)
-        det_performance = load_object_from_file(results_fullpath, data_filename, 'det_performance_' + configs.model + '_' + str(configs.conf_thresh), cnt_frame)
-        det_performance_all.append(det_performance)  # store all evaluation results in a list for performance assessme
+        # det_performance = load_object_from_file(results_fullpath, data_filename, 'det_performance_' + configs.model + '_' + str(configs.conf_thresh), cnt_frame)
+        # det_performance_all.append(det_performance)  # store all evaluation results in a list for performance assessme
         # print(det_performance)
+        
+        # Prep for Plot exercice 2
+        if calc_Precision_recall == True:
+            for i, thresh in enumerate(threshs):
+                thresh = round(thresh, 1)
+                # print(thresh)
+                det_performance = load_object_from_file(results_fullpath, data_filename, 'det_performance_' + configs.model + '_' + str(thresh), cnt_frame)
+                det_performance_all2[i].append(det_performance)  # store all evaluation results in a list for performance assessme
+            
         #######
         ####### LESSON 2 EXERCISES & EXAMPLES  END #######
 
@@ -181,9 +201,17 @@ while True:
     except StopIteration:
         # if StopIteration is raised, break from loop
         break
+    
+# Exercise C2-4-5 : Compute precision and recall (part 2/2)
+# precision, recall = l2_exercises.compute_precision_recall(det_performance_all)
 
-    # Exercise C2-4-5 : Compute precision and recall (part 2/2)
-    l2_exercises.compute_precision_recall(det_performance_all)
 
+if calc_Precision_recall == True:
+    for i, thresh in enumerate(threshs):
+        thresh = round(thresh, 1)
+        precision, recall = l2_exercises.compute_precision_recall(det_performance_all2[i], thresh)
+        precisions.append(precision)
+        recalls.append(recall)
     # Exercise C2-4-6 : Plotting the precision-recall curve
-    # l2_exercises.plot_precision_recall()
+    
+    l2_exercises.plot_precision_recall(recalls, precisions)
