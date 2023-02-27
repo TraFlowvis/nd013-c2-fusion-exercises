@@ -233,7 +233,10 @@ def project_detections_into_bev(bev_map, detections, configs, color=[]):
 
         # draw colored line to identify object front
         corners_int = bev_corners.reshape(-1, 2)
-        cv2.line(bev_map, (corners_int[0, 0], corners_int[0, 1]), (corners_int[3, 0], corners_int[3, 1]), (255, 255, 0), 2)
+        # print("shape: {}".format(bev_map.shape))
+        # print("{}; {} | {}; {}".format(round(corners_int[0, 0]), round(corners_int[0, 1]), round(corners_int[3, 0]), round(corners_int[3, 1])))
+        cv2.line(bev_map, (round(corners_int[0, 0]), round(corners_int[0, 1])), (round(corners_int[3, 0]), round(corners_int[3, 1])), (255, 255, 0), 2)
+        
 
 
 
