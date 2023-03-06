@@ -17,7 +17,16 @@ class Camera:
         hx = np.zeros((2,1))
 
         ############
-        # TODO: implement and return h(x)
+        fi = self.f_i
+        fj = self.f_j
+        ci = self.c_i
+        cj = self.c_j
+        px, py, pz, _,_,_ = x
+        
+        h1 = ci-(fi*py/px)
+        h2 = cj - (fj*pz/px)
+        hx[0] = h1
+        hx[1] = h2
         ############
         
         return hx
@@ -27,7 +36,21 @@ class Camera:
         H = np.matrix(np.zeros((2, 6)))
 
         ############
-        # TODO: implement and return H
+        fi = self.f_i
+        fj = self.f_j
+        ci = self.c_i
+        cj = self.c_j
+        px, py, pz, _, _, _ = x
+        h11 = fi * py/(px**2)
+        h12 = -(fi/px)
+        h21 = (fj*pz)/(px**2)
+        h23 = -(fj/px)
+        
+        H[0,0] = h11
+        H[0,1] = h12
+        H[1,0] = h21
+        H[1,2] = h23
+        
         ############ 
         
         return H
