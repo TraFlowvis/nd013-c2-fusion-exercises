@@ -18,7 +18,10 @@ class Association:
         self.association_matrix = np.inf*np.ones((N,M)) 
 
         ############
-        # TODO: fill association matrix with Mahalanobis distances between all tracks and all measurements
+        for i, track in enumerate(track_list):
+            for j, meas in enumerate(meas_list):
+                self.association_matrix[i,j] = self.MHD(track,meas)
+                
         ############
         
     def MHD(self, track, meas):
@@ -28,9 +31,18 @@ class Association:
         # TODO: Calculate and return Mahalanobis distance between track and meas. 
         # You will also need to implement the measurement matrix H for 2D lidar measurements.
         # Note that the track is already given in sensor coordinates here, no transformation needed.
+        # d(x,z) = (z-h(x))^T * S^-1 (z-h(x))
+        # S = H* P* H^T + R
+        #  Lidar Mesuremnt Matrix
+        H = np.matrix([[1, 0, 0, 0],
+                       [0, 1, 0, 0]]) 
+        
+        S = H*track.P*H.transpose() + meas.R # covariance of residual
+        gamma = meas.z - H*track.x
+        d = gamma.transpose() * np.linalg.inv(S)* gamma
         ############
         
-        return 0
+        return d
     
 
 ################## 
